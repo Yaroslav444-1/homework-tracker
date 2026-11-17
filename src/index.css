@@ -39,6 +39,7 @@
   color-scheme: light;
   --canvas: #f3f2f8;
   --surface: rgb(255 255 255 / 0.72);
+  --surface-solid: rgb(255 255 255 / 0.9);
   --surface-2: rgb(255 255 255 / 0.9);
   --elevated: rgb(255 255 255 / 0.94);
   --line: rgb(20 18 40 / 0.1);
@@ -53,6 +54,7 @@
   color-scheme: dark;
   --canvas: #060608;
   --surface: rgb(17 16 26 / 0.66);
+  --surface-solid: rgb(17 16 26 / 0.88);
   --surface-2: rgb(255 255 255 / 0.07);
   --elevated: rgb(18 17 26 / 0.92);
   --line: rgb(255 255 255 / 0.1);
@@ -72,6 +74,14 @@ body {
   background-color: var(--surface);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
+
+  /* На сенсорных устройствах размытие пересчитывается каждый кадр прокрутки и даёт рывки —
+     там используем почти непрозрачную заливку без размытия */
+  @media (pointer: coarse) {
+    background-color: var(--surface-solid);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /* Моноширинная подпись капсом, как плашки на референсе */
@@ -92,15 +102,27 @@ body {
   mask-image: radial-gradient(ellipse at 50% 30%, black 40%, transparent 85%);
 }
 
-/* Мягкая пульсация для просроченных и сегодняшних дедлайнов */
+/* Мягкая пульсация для просроченных и сегодняшних дедлайнов.
+   Тень нарисована один раз на псевдоэлементе, анимируется только opacity — без перерисовки кадров. */
 @keyframes deadline-glow {
-  0%, 100% { box-shadow: 0 0 0 0 transparent; }
-  50% { box-shadow: 0 0 34px -4px var(--pulse-color); }
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 @utility pulse-glow {
-  animation: deadline-glow 2.4s ease-in-out infinite;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    box-shadow: 0 0 34px -4px var(--pulse-color);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+    animation: deadline-glow 2.4s ease-in-out infinite;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pulse-glow { animation: none; }
+  .pulse-glow::after { animation: none; }
 }

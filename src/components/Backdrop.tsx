@@ -14,15 +14,17 @@ function ringStyle(thickness: string, from: number): CSSProperties {
 /** Декоративный фон: сетка и объёмные фиолетовые формы, как на референсе. */
 export function Backdrop() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    // h-lvh — постоянная высота «большого» экрана: фон не прыгает, когда на телефоне
+    // при прокрутке прячется/появляется адресная строка. transform-gpu — отдельный слой без перерисовки.
+    <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-lvh transform-gpu overflow-hidden">
       <div className="bg-grid absolute inset-0" />
       <div className="absolute inset-0 opacity-[var(--glow)]">
         <div
-          className="absolute top-[-12rem] right-[-16rem] h-[38rem] w-[38rem] rotate-12 rounded-full blur-[1.5px] sm:top-[-8rem] sm:right-[-12rem]"
+          className="absolute top-[-12rem] right-[-16rem] h-[38rem] w-[38rem] rotate-12 rounded-full sm:top-[-8rem] sm:right-[-12rem]"
           style={ringStyle('6.5rem', 140)}
         />
         <div
-          className="absolute bottom-[-20rem] left-[-14rem] h-[42rem] w-[42rem] rounded-full blur-[1.5px]"
+          className="absolute bottom-[-20rem] left-[-14rem] h-[42rem] w-[42rem] rounded-full"
           style={ringStyle('7rem', 320)}
         />
         {/* Свечение вокруг форм */}

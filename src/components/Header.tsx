@@ -8,7 +8,7 @@ interface Props {
 
 export function Header({ theme, onToggleTheme }: Props) {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-line bg-canvas/70 backdrop-blur-xl pointer-coarse:bg-canvas/95 pointer-coarse:backdrop-blur-none">
       <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3 px-4 py-3 lg:px-8">
         <div className="flex items-center gap-3">
           <motion.div
