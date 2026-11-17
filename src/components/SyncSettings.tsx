@@ -10,7 +10,7 @@ interface Props {
   onClose: () => void
 }
 
-const linkClass = 'inline-flex items-center gap-1 font-medium text-indigo-600 hover:underline dark:text-indigo-400'
+const linkClass = 'inline-flex items-center gap-1 font-medium text-brand-600 hover:underline dark:text-brand-300'
 
 export function SyncSettings({ sync, onClose }: Props) {
   const [repo, setRepo] = useState('')
@@ -40,14 +40,14 @@ export function SyncSettings({ sync, onClose }: Props) {
     <Modal title="Синхронизация с GitHub" onClose={onClose}>
       {sync.connected ? (
         <div className="space-y-4">
-          <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/50">
-            <p className="text-sm text-slate-500 dark:text-slate-400">Подключено к репозиторию</p>
+          <div className="rounded-3xl border border-line bg-surface p-4">
+            <p className="caption text-muted">Подключено к репозиторию</p>
             <p className="mt-0.5 font-semibold break-all">{sync.repo}</p>
             <div className="mt-3">
               <SyncStatusLine sync={sync} />
             </div>
           </div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm text-muted">
             Изменения отправляются автоматически, а при открытии сайта подтягиваются данные с других устройств.
             Чтобы подключить телефон, откройте там этот сайт и введите тот же репозиторий и токен.
           </p>
@@ -64,7 +64,7 @@ export function SyncSettings({ sync, onClose }: Props) {
         </div>
       ) : (
         <form onSubmit={submit} className="space-y-4">
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-slate-600 dark:text-slate-300">
+          <ol className="list-decimal space-y-2 pl-5 text-sm text-ink/85">
             <li>
               Создайте <b>приватный</b> репозиторий, например <code>homework-data</code>:{' '}
               <a className={linkClass} href="https://github.com/new" target="_blank" rel="noreferrer">
@@ -77,7 +77,7 @@ export function SyncSettings({ sync, onClose }: Props) {
                 создать токен <ExternalLink className="h-3 w-3" />
               </a>
               <br />
-              <span className="text-slate-500 dark:text-slate-400">
+              <span className="text-muted">
                 Repository access → <i>Only select repositories</i> → ваш репозиторий. Permissions → <i>Contents</i> → <i>Read and write</i>.
               </span>
             </li>
@@ -113,7 +113,7 @@ export function SyncSettings({ sync, onClose }: Props) {
           </div>
 
           {error && (
-            <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">
+            <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300">
               Не удалось подключиться: {error}
             </p>
           )}
@@ -125,7 +125,7 @@ export function SyncSettings({ sync, onClose }: Props) {
         </form>
       )}
 
-      <p className="mt-5 flex gap-2 border-t border-slate-100 pt-4 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
+      <p className="mt-5 flex gap-2 border-t border-line pt-4 text-xs text-muted">
         <Lock className="h-4 w-4 shrink-0" />
         Данные хранятся в вашем приватном репозитории, который видите только вы. Токен остаётся в этом браузере и не попадает
         в экспорт JSON. Сайт общается только с api.github.com — сторонних серверов нет.

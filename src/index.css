@@ -1,15 +1,106 @@
+@import "@fontsource-variable/onest";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/700.css";
 @import "tailwindcss";
 
 /* Тёмная тема переключается классом .dark на <html> */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Дизайн-система в стиле референса: глубокий чёрный фон с тонкой сеткой,
+  объёмные фиолетовые формы, стеклянные «пилюли» с тонким контуром,
+  крупная жирная гротесковая типографика и моноширинные подписи капсом.
+*/
+@theme {
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-brand-300: #b8a5ff;
+  --color-brand-400: #9478ff;
+  --color-brand-500: #7550ff;
+  --color-brand-600: #5d2fff;
+  --color-brand-700: #4a1ee6;
+}
+
+/* Цвета, зависящие от темы */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-elevated: var(--elevated);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+}
+
 :root {
   color-scheme: light;
+  --canvas: #f3f2f8;
+  --surface: rgb(255 255 255 / 0.72);
+  --surface-2: rgb(255 255 255 / 0.9);
+  --elevated: rgb(255 255 255 / 0.94);
+  --line: rgb(20 18 40 / 0.1);
+  --line-strong: rgb(20 18 40 / 0.18);
+  --ink: #0f0e17;
+  --muted: #5a5870;
+  --grid: rgb(20 18 40 / 0.05);
+  --glow: 0.35;
 }
+
 .dark {
   color-scheme: dark;
+  --canvas: #060608;
+  --surface: rgb(17 16 26 / 0.66);
+  --surface-2: rgb(255 255 255 / 0.07);
+  --elevated: rgb(18 17 26 / 0.92);
+  --line: rgb(255 255 255 / 0.1);
+  --line-strong: rgb(255 255 255 / 0.2);
+  --ink: #f6f5fb;
+  --muted: #a3a1b8;
+  --grid: rgb(255 255 255 / 0.045);
+  --glow: 1;
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  @apply bg-canvas font-sans text-ink antialiased;
+}
+
+/* Стеклянная поверхность: полупрозрачная заливка и размытие фона (контур задаётся классами border-*) */
+@utility glass {
+  background-color: var(--surface);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* Моноширинная подпись капсом, как плашки на референсе */
+@utility caption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Тонкая сетка на фоне, затухающая к краям */
+@utility bg-grid {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at 50% 30%, black 40%, transparent 85%);
+}
+
+/* Мягкая пульсация для просроченных и сегодняшних дедлайнов */
+@keyframes deadline-glow {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 34px -4px var(--pulse-color); }
+}
+@utility pulse-glow {
+  animation: deadline-glow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-glow { animation: none; }
 }

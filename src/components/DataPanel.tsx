@@ -21,13 +21,13 @@ export function DataPanel({ sync, onOpenSync, onExport, onImport }: Props) {
   }
 
   return (
-    <section className="divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
+    <section className="glass divide-y divide-line rounded-[2rem] border border-line">
       <div className="p-5">
         <div className="flex items-start gap-3">
-          <Cloud className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
+          <Cloud className="mt-0.5 h-5 w-5 shrink-0 text-brand-500 dark:text-brand-400" />
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
-              <h2 className="font-semibold">Синхронизация</h2>
+              <h2 className="font-bold tracking-tight uppercase">Синхронизация</h2>
               {sync.connected && (
                 <button type="button" className={`${iconBtn} -my-2 -mr-2`} onClick={onOpenSync} aria-label="Настройки синхронизации">
                   <Settings2 className="h-4 w-4" />
@@ -35,11 +35,11 @@ export function DataPanel({ sync, onOpenSync, onExport, onImport }: Props) {
               )}
             </div>
             {sync.connected ? (
-              <div className="mt-1">
+              <div className="mt-1.5">
                 <SyncStatusLine sync={sync} />
               </div>
             ) : (
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1.5 text-sm text-muted">
                 Бесплатно синхронизируйте задания между ПК и телефоном через свой приватный репозиторий GitHub.
               </p>
             )}
@@ -54,15 +54,13 @@ export function DataPanel({ sync, onOpenSync, onExport, onImport }: Props) {
 
       <div className="p-5">
         <div className="flex items-start gap-3">
-          <HardDrive className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
+          <HardDrive className="mt-0.5 h-5 w-5 shrink-0 text-brand-500 dark:text-brand-400" />
           <div>
-            <h2 className="font-semibold">Резервная копия</h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Задания хранятся в этом браузере. Сохраните их в JSON-файл или загрузите из файла.
-            </p>
+            <h2 className="font-bold tracking-tight uppercase">Резервная копия</h2>
+            <p className="mt-1.5 text-sm text-muted">Задания хранятся в этом браузере. Сохраните их в JSON-файл или загрузите из файла.</p>
           </div>
         </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
           <button type="button" className={btnSecondary} onClick={onExport}>
             <Download className="h-4 w-4" />
             Экспорт в JSON

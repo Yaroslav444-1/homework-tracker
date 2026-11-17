@@ -12,51 +12,50 @@ interface Props {
   onManage: () => void
 }
 
-// На телефоне — «чипсы» в строку, на ПК (lg+) — вертикальное меню в сайдбаре.
+// На телефоне — стеклянные «пилюли» в строку, на ПК (lg+) — вертикальное меню в сайдбаре.
 function chipClass(active: boolean): string {
   return (
-    'relative inline-flex items-center rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ' +
-    'lg:w-full lg:rounded-xl lg:px-3 lg:py-2.5 ' +
+    'caption relative inline-flex items-center rounded-full border px-4 py-2 transition-colors ' +
+    'lg:w-full lg:px-4 lg:py-2.5 ' +
     (active
-      ? 'border-transparent text-white dark:text-slate-900'
-      : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 ' +
-        'lg:border-transparent lg:bg-transparent lg:hover:bg-slate-100 lg:dark:border-transparent lg:dark:bg-transparent lg:dark:hover:bg-slate-800')
+      ? 'border-transparent text-white'
+      : 'glass border-line text-ink/85 hover:border-line-strong hover:text-ink lg:border-transparent lg:bg-transparent lg:backdrop-blur-none lg:hover:bg-surface-2')
   )
 }
 
 function Chip({ active, onClick, dot, label, count }: { active: boolean; onClick: () => void; dot?: string; label: string; count: number }) {
   return (
-    <button type="button" className={chipClass(active)} onClick={onClick}>
+    <motion.button type="button" whileTap={{ scale: 0.94 }} className={chipClass(active)} onClick={onClick}>
       {active && (
         <motion.span
           layoutId="active-subject"
-          className="absolute inset-0 rounded-full bg-slate-900 lg:rounded-xl dark:bg-white"
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-600 to-brand-500 shadow-[0_6px_22px_-6px_rgb(93_47_255/0.85)]"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.45 }}
         />
       )}
       <span className="relative flex min-w-0 flex-1 items-center gap-2">
-        {dot && <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${dot}`} />}
+        {dot && <span className={`h-2 w-2 shrink-0 rounded-full ring-2 ring-white/20 ${dot}`} />}
         <span className="truncate">{label}</span>
         <motion.span
           key={count}
           initial={{ scale: 1.4 }}
           animate={{ scale: 1 }}
           className={
-            'min-w-5 rounded-full px-1.5 text-center text-xs tabular-nums lg:ml-auto ' +
-            (active ? 'bg-white/20 dark:bg-slate-900/15' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400')
+            'min-w-5 rounded-full px-1.5 text-center tabular-nums lg:ml-auto ' +
+            (active ? 'bg-white/20 text-white' : 'bg-surface-2 text-muted')
           }
         >
           {count}
         </motion.span>
       </span>
-    </button>
+    </motion.button>
   )
 }
 
 export function SubjectFilter({ subjects, activeCounts, totalActive, selected, onSelect, onManage }: Props) {
   return (
-    <nav className="lg:rounded-2xl lg:border lg:border-slate-200 lg:bg-white lg:p-3 lg:dark:border-slate-800 lg:dark:bg-slate-900">
-      <h2 className="hidden px-3 pt-1 pb-2 text-xs font-semibold tracking-wider text-slate-400 uppercase lg:block">Предметы</h2>
+    <nav className="lg:glass lg:rounded-[2rem] lg:border lg:border-line lg:p-3">
+      <h2 className="caption hidden px-4 pt-2 pb-3 text-muted lg:block">Предметы</h2>
       <div className="flex flex-wrap items-center gap-2 lg:flex-col lg:items-stretch lg:gap-1">
         <Chip active={selected === 'all'} onClick={() => onSelect('all')} label="Все предметы" count={totalActive} />
         {subjects.map((s) => (
@@ -69,14 +68,15 @@ export function SubjectFilter({ subjects, activeCounts, totalActive, selected, o
             count={activeCounts[s.id] ?? 0}
           />
         ))}
-        <button
+        <motion.button
           type="button"
+          whileTap={{ scale: 0.94 }}
           onClick={onManage}
-          className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-slate-300 px-3.5 py-1.5 text-sm font-medium text-slate-500 transition hover:border-indigo-400 hover:text-indigo-600 lg:mt-2 lg:justify-center lg:rounded-xl lg:py-2.5 dark:border-slate-700 dark:text-slate-400 dark:hover:border-indigo-500 dark:hover:text-indigo-400"
+          className="caption inline-flex items-center gap-1.5 rounded-full border border-dashed border-line-strong px-4 py-2 text-muted transition hover:border-brand-500 hover:text-brand-600 lg:mt-2 lg:justify-center lg:py-2.5 dark:hover:text-brand-300"
         >
-          <Settings2 className="h-4 w-4" />
+          <Settings2 className="h-3.5 w-3.5" />
           Управлять предметами
-        </button>
+        </motion.button>
       </div>
     </nav>
   )

@@ -30,7 +30,7 @@ export function Modal({ title, onClose, children }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/50 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
@@ -41,15 +41,15 @@ export function Modal({ title, onClose, children }: Props) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
         transition={{ type: 'spring', bounce: 0.15, duration: 0.4 }}
-        className="max-h-[92dvh] w-full overflow-y-auto rounded-t-3xl border border-slate-200 bg-white shadow-2xl sm:max-w-lg sm:rounded-2xl dark:border-slate-800 dark:bg-slate-900"
+        className="max-h-[92dvh] w-full overflow-y-auto rounded-t-[2rem] border border-line bg-elevated shadow-2xl shadow-black/40 backdrop-blur-2xl sm:max-w-lg sm:rounded-[2rem]"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/90 px-5 py-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
-          <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-elevated/80 px-6 py-4 backdrop-blur">
+          <h2 className="text-lg font-bold tracking-tight uppercase">{title}</h2>
           <button type="button" className={iconBtn} onClick={onClose} aria-label="Закрыть">
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="p-5">{children}</div>
+        <div className="p-6">{children}</div>
       </motion.div>
     </motion.div>
   )

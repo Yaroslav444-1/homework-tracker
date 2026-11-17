@@ -6,7 +6,7 @@ const timeFormatter = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 
 export function SyncStatusLine({ sync }: { sync: GithubSync }) {
   if (sync.status === 'syncing') {
     return (
-      <p className="flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400">
+      <p className="flex items-center gap-2 text-sm text-brand-600 dark:text-brand-300">
         <RefreshCw className="h-4 w-4 shrink-0 animate-spin" />
         Синхронизация…
       </p>
@@ -21,7 +21,7 @@ export function SyncStatusLine({ sync }: { sync: GithubSync }) {
     )
   }
   return (
-    <p className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
+    <p className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400">
       <CloudCheck className="h-4 w-4 shrink-0" />
       {sync.dirty || !sync.lastSyncAt ? 'Ожидает синхронизации' : `Синхронизировано · ${timeFormatter.format(sync.lastSyncAt)}`}
     </p>

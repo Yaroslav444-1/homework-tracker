@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { BookOpen, Inbox, Plus, Sparkles } from 'lucide-react'
+import { Backdrop } from './components/Backdrop'
 import { Header } from './components/Header'
 import { SubjectFilter } from './components/SubjectFilter'
 import { SubjectManager } from './components/SubjectManager'
@@ -13,7 +14,7 @@ import { useTheme } from './hooks/useTheme'
 import { newId } from './lib/constants'
 import { dueTimestamp, plural } from './lib/deadline'
 import { exportData, loadData, parseImportFile, saveData } from './lib/storage'
-import { btnPrimary } from './lib/ui'
+import { btnPrimary, btnSecondary } from './lib/ui'
 import type { AppData, ColorKey, Task, TaskDraft } from './lib/types'
 
 export default function App() {
@@ -124,6 +125,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-dvh">
+        <Backdrop />
         <Header theme={theme} onToggleTheme={toggleTheme} />
 
         {/* Телефон: одна колонка. ПК (lg+): сайдбар слева, задания справа во всю ширину. */}
@@ -137,18 +139,14 @@ export default function App() {
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="flex flex-col gap-3 rounded-2xl border border-indigo-200 bg-indigo-50 p-4 sm:flex-row sm:items-center lg:flex-col lg:items-stretch dark:border-indigo-500/30 dark:bg-indigo-500/10">
+                  <div className="glass flex flex-col gap-3 rounded-[2rem] border border-brand-500/40 bg-brand-500/10 p-5 sm:flex-row sm:items-center lg:flex-col lg:items-stretch">
                     <div className="flex flex-1 gap-3">
-                      <Sparkles className="h-5 w-5 shrink-0 text-indigo-500" />
-                      <p className="text-sm text-indigo-900 dark:text-indigo-200">
+                      <Sparkles className="h-5 w-5 shrink-0 text-brand-500 dark:text-brand-300" />
+                      <p className="text-sm text-ink/90">
                         Это демо-данные, чтобы показать, как всё работает. Удалите их, когда начнёте добавлять свои задания.
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={clearDemo}
-                      className="rounded-xl bg-white px-3.5 py-2 text-sm font-semibold text-indigo-700 shadow-sm ring-1 ring-indigo-200 transition hover:bg-indigo-100 active:scale-[0.97] dark:bg-indigo-500/20 dark:text-indigo-200 dark:ring-indigo-500/30 dark:hover:bg-indigo-500/30"
-                    >
+                    <button type="button" onClick={clearDemo} className={btnSecondary}>
                       Очистить демо-данные
                     </button>
                   </div>
@@ -176,25 +174,31 @@ export default function App() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 12 }}
                     transition={{ duration: 0.18 }}
-                    className="truncate text-2xl font-bold tracking-tight lg:text-3xl"
+                    className="truncate py-1 text-4xl leading-none font-extrabold tracking-tight uppercase sm:text-5xl xl:text-6xl"
                   >
                     {title}
                   </motion.h2>
                 </AnimatePresence>
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                <p className="caption mt-3 text-muted">
                   {activeInFilter} {plural(activeInFilter, 'активное задание', 'активных задания', 'активных заданий')}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-4">
-                <label className="inline-flex cursor-pointer items-center gap-3 text-sm text-slate-600 select-none dark:text-slate-300">
+                <label className="caption inline-flex cursor-pointer items-center gap-3 text-ink/85 select-none">
                   <input
                     type="checkbox"
                     className="peer sr-only"
                     checked={showDone}
                     onChange={(e) => setShowDone(e.target.checked)}
                   />
-                  <span className="relative h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-indigo-600 peer-focus-visible:ring-4 peer-focus-visible:ring-indigo-500/30 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition after:duration-300 peer-checked:after:translate-x-5 dark:bg-slate-700" />
-                  Показывать выполненные{doneInFilter > 0 && <span className="text-slate-400">({doneInFilter})</span>}
+                  <span
+                    className={`flex h-7 w-12 items-center rounded-full border p-0.5 transition-colors peer-focus-visible:ring-4 peer-focus-visible:ring-brand-500/30 ${
+                      showDone ? 'justify-end border-transparent bg-gradient-to-r from-brand-600 to-brand-500' : 'justify-start border-line-strong bg-ink/15'
+                    }`}
+                  >
+                    <motion.span layout transition={{ type: 'spring', bounce: 0.35, duration: 0.35 }} className="h-5.5 w-5.5 rounded-full bg-white shadow-md" />
+                  </span>
+                  Показывать выполненные{doneInFilter > 0 && <span className="text-muted">({doneInFilter})</span>}
                 </label>
                 <button
                   type="button"
@@ -227,7 +231,7 @@ export default function App() {
                 text={doneInFilter > 0 ? 'Все задания выполнены — отличная работа!' : 'Добавьте задание, чтобы не пропустить дедлайн.'}
               />
             ) : (
-              <ul className="relative grid gap-3 md:grid-cols-2 2xl:grid-cols-3">
+              <ul className="relative grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                   {visible.map((t, i) => (
                     <TaskItem
@@ -292,18 +296,18 @@ function EmptyState({ icon, title, text, action }: { icon: ReactNode; title: str
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col items-center rounded-2xl border border-dashed border-slate-300 px-6 py-16 text-center dark:border-slate-700"
+      className="glass flex flex-col items-center rounded-[2rem] border border-dashed border-line-strong px-6 py-16 text-center"
     >
       <motion.div
         initial={{ scale: 0.5 }}
         animate={{ scale: 1 }}
         transition={{ type: 'spring', bounce: 0.5, delay: 0.1 }}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[0_8px_24px_-8px_rgb(93_47_255/0.8)]"
       >
         {icon}
       </motion.div>
-      <h2 className="mt-4 font-semibold">{title}</h2>
-      <p className="mt-1 max-w-sm text-sm text-slate-500 dark:text-slate-400">{text}</p>
+      <h2 className="mt-5 text-xl font-extrabold tracking-tight uppercase">{title}</h2>
+      <p className="mt-2 max-w-sm text-sm text-muted">{text}</p>
       {action && <div className="mt-5">{action}</div>}
     </motion.div>
   )
